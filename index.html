@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#24634d" />
+    <meta name="description" content="Crie certificados personalizados a partir do seu PDF. Gratuito, direto no navegador e sem enviar seus arquivos a um servidor." />
+    <title>Certifica — Estúdio de certificados</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      if (location.protocol === 'file:') {
+        document.getElementById('root').innerHTML = '<main style="font-family:system-ui;max-width:560px;margin:12vh auto;padding:28px;line-height:1.7"><h1>Abra o Certifica pelo servidor local</h1><p>Este projeto React precisa de HTTP. Dê dois cliques em <strong>iniciar.cmd</strong> na pasta do projeto ou execute <code>npm run dev</code>.</p><p>Se o servidor já estiver iniciado: <a href="http://127.0.0.1:5174/">abrir o Certifica</a>.</p><p>No GitHub Pages, use o endereço HTTPS publicado.</p></main>';
+      }
+    </script>
+    <script type="module" src="/src/App.jsx"></script>
+  </body>
+</html>

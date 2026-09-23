@@ -1,0 +1,29 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "engines": { "node": ">=22.13.0" },
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite",
+        "preview": "vite preview",
+        "test": "playwright test"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.63.0",
+        "@vitejs/plugin-react": "4.7",
+        "vite": "^7.0.7"
+    },
+    "dependencies": {
+        "@fontsource/noto-sans": "^5.3.0",
+        "@fontsource/noto-serif": "^5.3.0",
+        "@pdf-lib/fontkit": "^1.1.1",
+        "jszip": "^3.10.2",
+        "lucide-react": "^1.47.0",
+        "papaparse": "^5.7.0",
+        "pdf-lib": "^1.17.1",
+        "pdfjs-dist": "^6.3.289",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0"
+    }
+}
