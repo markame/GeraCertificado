@@ -55,10 +55,18 @@ export async function renderCertificate(template, person, common) {
         field.setText(text);
         field.disableMultiline();
         field.setAlignment(TextAlignment.Center);
-        let size = template.id.startsWith('fp-') ? 18 : 12;
+        const professions = template.id.startsWith('fp-');
+        let size = professions ? 24 : 16;
         for (const widget of field.acroField.getWidgets()) {
-            const rect = widget.getRectangle();
+            const original = widget.getRectangle();
+            // Preserve each field's center but give the larger type enough height.
+            // The date fields in some originals are too narrow for a full city/date.
+            const height = professions ? 36 : 26;
+            const width = key === 'localData' ? Math.max(original.width, professions ? 580 : 400) : original.width;
+            const rect = { x: original.x - (width - original.width) / 2, y: original.y - (height - original.height) / 2, width, height };
+            widget.setRectangle(rect);
             widget.getBorderStyle()?.setWidth(0);
+            widget.getAppearanceCharacteristics()?.setBorderColor([]);
             const maxSize = Math.min(size, (rect.height - 2) / font.heightAtSize(1), (rect.width - 6) / Math.max(1, font.widthOfTextAtSize(text, 1)));
             size = Math.min(size, maxSize);
             widget.setDefaultAppearance(`/Helv ${size} Tf 0.129 0.129 0.129 rg`);

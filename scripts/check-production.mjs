@@ -3,7 +3,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
-import { PDFDocument } from 'pdf-lib';
 
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.woff': 'font/woff', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };
 const server = http.createServer(async (req, res) => {
@@ -21,14 +20,16 @@ try {
     page.on('pageerror', e => errors.push(e.message));
     page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
     await page.goto(`http://127.0.0.1:${server.address().port}/certifica/`);
-    const pdf = await PDFDocument.create(); pdf.addPage([842, 595]);
-    await page.locator('input[accept*="pdf"]').setInputFiles({ name: 'modelo.pdf', mimeType: 'application/pdf', buffer: Buffer.from(await pdf.save()) });
+    await page.getByLabel('Tipo de certificado').selectOption('fc-orientador');
+    await page.getByLabel('Nome do IEMA Pleno').fill('IEMA Pleno São Luís');
+    await page.getByLabel('Cidade', { exact: true }).fill('São Luís');
+    await page.getByLabel('Nome do projeto', { exact: true }).fill('Ciência e inclusão');
     await page.getByLabel('Um nome por linha').fill('João da Conceição');
     await page.getByRole('button', { name: 'Baixar prévia' }).waitFor();
     await page.waitForFunction(() => Array.from(document.querySelectorAll('button')).some(b => b.textContent.includes('Baixar prévia') && !b.disabled), { timeout: 30000 });
     const pending = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Gerar certificados', exact: true }).click();
-    assert.equal((await pending).suggestedFilename(), 'certificados.zip');
+    assert.equal((await pending).suggestedFilename(), 'fc-orientador-certificados.zip');
     assert.deepEqual(errors, []);
     console.log('Produção em /certifica/: fontes, worker, prévia e download ZIP OK.');
 } finally {

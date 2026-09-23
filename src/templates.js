@@ -5,6 +5,7 @@ export const certificateTypes = [
     { id: 'fc-orientador', group: 'Feira de Ciências', label: 'Orientador(a)', file: 'fc-orientador.pdf', fields: { unidade: 'text_17h0k', nome: 'text_24a3b', localData: 'text_36y5r', projeto: 'projeto' } },
     { id: 'fc-comissao', group: 'Feira de Ciências', label: 'Comissão organizadora', file: 'fc-comissao.pdf', fields: { unidade: 'text_13j0z', nome: 'text_27m2y', localData: 'text_36a3g' } },
     { id: 'fc-avaliador', group: 'Feira de Ciências', label: 'Avaliador(a)', file: 'fc-avaliador.pdf', fields: { unidade: 'text_18p5o', nome: 'text_23x3v', localData: 'text_37z7p' } },
+    { id: 'fc-primeiro', group: 'Feira de Ciências', label: '1º lugar', file: 'fc-primeiro.pdf', fields: { unidade: 'text_17x9k', nome: 'text_21l8j', localData: 'text_32r0m' } },
     { id: 'fc-segundo', group: 'Feira de Ciências', label: '2º lugar', file: 'fc-segundo.pdf', fields: { unidade: 'text_17x9k', nome: 'text_21l8j', localData: 'text_32r0m' } },
     { id: 'fc-terceiro', group: 'Feira de Ciências', label: '3º lugar', file: 'fc-terceiro.pdf', fields: { unidade: 'text_17x9k', nome: 'text_21l8j', localData: 'text_32r0m' } },
 ];

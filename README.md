@@ -1,69 +1,62 @@
 # Certifica
 
-Aplicação React + Vite para gerar certificados a partir de um layout PDF. Funciona como site estático no GitHub Pages: não utiliza PHP, Laravel, banco de dados ou API.
+Aplicação React + Vite para preencher os modelos de certificados do IEMA. Funciona no GitHub Pages, sem PHP, banco de dados ou API. Dados dos participantes ficam no navegador.
 
-## Executar localmente
+## Executar
 
-Requer Node.js 22.13+ (ou uma versão LTS mais recente).
+Requer Node.js 22.13+.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Abra o endereço exibido pelo Vite. Para testar o resultado de produção:
-
-No Windows, você também pode dar dois cliques em `iniciar.cmd`: ele inicia o servidor na porta 5174 e abre o navegador. Não abra o `index.html` diretamente por `file://`; módulos JavaScript e o processamento de PDF precisam de HTTP/HTTPS.
+No Windows, `iniciar.cmd` inicia na porta 5174 e abre o navegador. Acesse por HTTP, não abra `index.html` diretamente.
 
 ```sh
 npm run build
 npm run preview
 ```
 
-## Publicar no GitHub Pages
-
-1. Crie um repositório no GitHub e envie este projeto para a branch `main`.
-2. Em **Settings → Pages → Build and deployment → Source**, selecione **GitHub Actions**.
-3. Em **Actions**, execute **Publicar no GitHub Pages**, ou envie um novo commit à `main`.
-4. Ao terminar, o endereço aparecerá no ambiente `github-pages` e em Settings → Pages.
-
-O workflow `.github/workflows/deploy.yml` instala as dependências, gera `dist` e publica somente essa pasta. `base: './'` permite hospedar também em `https://usuario.github.io/nome-do-repositorio/`, sem alterar o código. Se sua branch principal tiver outro nome, atualize o workflow.
-
-Documentação: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
-
 ## Usar
 
-1. Selecione ou arraste um PDF com até 10 MB e 10 páginas. Reserve uma área em branco para o nome.
-2. Digite um participante por linha ou importe um CSV em UTF-8. Pode usar vírgula, ponto e vírgula ou tabulação. A coluna `nome`, `nome completo`, `participante` ou `name` é reconhecida; sem esse cabeçalho, utiliza-se a primeira coluna.
-3. Clique no certificado para posicionar o centro do nome ou ajuste os controles horizontal e vertical. Escolha fonte, cor, tamanho e página.
-4. Navegue pelos participantes e baixe uma prévia PDF para conferir.
-5. Gere o lote e receba um ZIP com um PDF por pessoa. Nomes repetidos recebem prefixos numéricos distintos.
+1. Escolha o tipo de certificado. O modelo aparece automaticamente.
+2. Preencha o nome do IEMA Pleno, cidade e data de emissão. A data inicia com o dia atual e pode ser alterada.
+3. Digite um participante por linha ou importe CSV UTF-8 com coluna `nome` (sem cabeçalho, a primeira coluna é utilizada).
+4. Para orientadores, preencha o projeto. Desmarque “Mesmo projeto para todos” para editar o projeto de cada orientador usando as setas. CSVs com colunas `nome;projeto` também são aceitos.
+5. Confira ou baixe a prévia e gere o ZIP.
 
-## Privacidade e limites
+Os campos dos PDFs são preenchidos em suas posições originais, com fontes de até 24 pt nos modelos de Profissões e 16 pt nos de Ciências. Textos longos diminuem para caber; textos sem espaço suficiente são rejeitados. O campo de cidade/data foi ampliado para comportar a data por extenso. Os PDFs mantêm os campos editáveis e suas aparências atualizadas.
 
-- PDFs, CSVs e nomes ficam somente na memória do navegador; não são enviados a servidores nem salvos em localStorage.
-- Fontes e biblioteca de visualização são servidas junto com o site, sem CDN externa.
-- Recarregar ou fechar a página descarta os dados. Guarde os arquivos originais e os downloads.
-- Até 200 participantes por lote, 150 caracteres por nome e CSV de até 1 MB.
-- Fontes latinas com suporte aos acentos do português. Símbolos sem glifos disponíveis são rejeitados com uma mensagem, para evitar certificados incompletos.
-- PDFs protegidos por senha não são aceitos. Use um layout estático; a aplicação não substitui texto que já existe no modelo nem valida assinaturas digitais.
-- Todas as páginas são preservadas. O nome é adicionado somente à página escolhida, respeitando rotação e área visível. Nomes longos são reduzidos para caber na largura disponível.
-- A geração utiliza memória do navegador. Para modelos grandes, prefira lotes menores.
+## Modelos incluídos
+
+- Feira de Profissões: aluno participante e comissão organizadora.
+- Feira de Ciências: aluno participante, orientador(a), comissão organizadora, avaliador(a), 1º lugar, 2º lugar e 3º lugar.
+
+Os onze arquivos fornecidos correspondem a nove modelos únicos. As duas cópias idênticas não são repetidas na seleção. Datas de realização dos eventos e cargas horárias permanecem as do layout original; a data no formulário é a de emissão.
+
+`public/templates/` contém os modelos usados no site. O orientador recebeu um campo de formulário para o projeto, substituindo somente o marcador impresso `[NOME DO PROJETO]`. `scripts/prepare_templates.py` documenta essa preparação; Python não é necessário para executar ou publicar o site.
+
+## GitHub Pages
+
+1. Envie o projeto para a branch `main` do seu repositório.
+2. Em **Settings → Pages → Build and deployment → Source**, escolha **GitHub Actions**.
+3. Execute o workflow **Publicar no GitHub Pages**, ou envie um commit à `main`.
+
+O workflow publica `dist`, incluindo os modelos PDF e as fontes. `base: './'` permite hospedar no subdiretório do repositório. Não é necessário configurar servidor.
 
 ## Testes
 
 ```sh
 npm test
+npm run build
+node scripts/check-production.mjs
 ```
 
-Os testes Playwright utilizam o Google Chrome instalado (`channel: 'chrome'`). Em outro ambiente, instale-o com `npx playwright install chrome` ou ajuste o canal em `playwright.config.js`.
+Os testes utilizam Google Chrome via Playwright. Conferem os nove modelos, valores dos campos, aparências, fontes maiores, data, importação de projetos individuais, ZIP e responsividade. O teste de produção verifica os arquivos em `/certifica/`, simulando GitHub Pages.
 
-Cobertura: upload, geração de ZIP, acentos, nomes duplicados, páginas e rotação, importação CSV, limites, PDF inválido, responsividade e ausência de envio de dados por POST.
+## Limites
 
-## Estrutura
+Até 200 participantes por lote, 150 caracteres por campo e CSV de 1 MB. Fontes com suporte a português e caracteres latinos. Dados não são persistidos ao recarregar a página. Os modelos são arquivos públicos do site; nomes e dados preenchidos não são enviados ao servidor.
 
-- `src/App.jsx`: interface e fluxo do estúdio.
-- `src/certificates.js`: leitura, personalização dos PDFs e geração do ZIP.
-- `src/styles.css`: estilos responsivos.
-- `.github/workflows/deploy.yml`: publicação no GitHub Pages.
-- `_laravel-backup/`: backup local da implementação inicial, ignorado pelo Git e excluído do build. Não é necessário para executar a aplicação.
+`_laravel-backup/` é somente um backup local ignorado pelo Git e excluído do build.

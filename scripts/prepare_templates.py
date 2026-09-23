@@ -10,6 +10,7 @@ sources = {
  'fc-orientador.pdf': 'FC_ORIENTADOR_2.pdf',
  'fc-comissao.pdf': 'FC_COM_ORGANIZADORA_3.pdf',
  'fc-avaliador.pdf': 'FC_AVALIADOR_1.pdf',
+ 'fc-primeiro.pdf': 'FC_1_LUGAR.pdf',
  'fc-terceiro.pdf': 'FC_3_LUGAR.pdf',
  'fc-segundo.pdf': 'FC_2_LUGAR.pdf',
 }
@@ -39,7 +40,9 @@ for output, source in sources.items():
   NameObject('/V'):TextStringObject(''), NameObject('/F'):NumberObject(4),
   NameObject('/Ff'):NumberObject(0), NameObject('/Q'):NumberObject(1),
   NameObject('/DA'):TextStringObject('/Helv 12 Tf 0 g'),
-  NameObject('/Rect'):ArrayObject([FloatObject(n) for n in [416.55,154.93,598.09,172.48]]),
+  # Baseline of the source sentence is y=167.780967 (PDF user coordinates).
+  # Keep the project text on that baseline after the larger field appearance.
+  NameObject('/Rect'):ArrayObject([FloatObject(n) for n in [416.55,167.557,598.09,185.107]]),
   NameObject('/P'):page.indirect_reference,
   NameObject('/BS'):DictionaryObject({NameObject('/W'):NumberObject(0)}),
  })

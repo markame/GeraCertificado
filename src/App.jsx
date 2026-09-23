@@ -15,12 +15,17 @@ function saveBlob(blob, filename) {
     setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
+function todayLocal() {
+    const date = new Date();
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 function App() {
     const [typeId, setTypeId] = useState(certificateTypes[0].id);
     const type = certificateTypes.find(item => item.id === typeId);
     const [template, setTemplate] = useState(null);
     const [text, setText] = useState('');
-    const [common, setCommon] = useState({ unidade: '', cidade: '', data: '', projeto: '' });
+    const [common, setCommon] = useState(() => ({ unidade: '', cidade: '', data: todayLocal(), projeto: '' }));
     const [projects, setProjects] = useState([]);
     const [sameProject, setSameProject] = useState(true);
     const [active, setActive] = useState(0);
